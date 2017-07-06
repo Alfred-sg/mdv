@@ -1,0 +1,26 @@
+{
+  "name": "redux-model",
+  "version": "0.0.1",
+  "description": "redux-model",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alfred-sg/redux-model.git"
+  },
+  "keywords": [
+    "redux",
+    "mvc"
+  ],
+  "author": "alfred-qiu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alfred-sg/redux-model/issues"
+  },
+  "homepage": "https://github.com/Alfred-sg/redux-model#readme",
+  "dependencies": {
+    "redux": "^3.7.1"
+  }
+}
