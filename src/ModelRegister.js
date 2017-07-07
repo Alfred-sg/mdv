@@ -35,49 +35,6 @@ function registerModel(name,ModelClass){
   	throw new Error("model hasn't connected with store.");
   };
 
-  if ( model.subscribe ){
-  	let events = model.subscribe();
-
-  	Object.keys(events).map(eventName => {
-  	  Event.on(eventName,events[eventName]);
-  	});
-
-  	Object.defineProperty(model,"subscribe",{
-	  enumerable: false,
-	  configurable: false,
-	  writable: false,
-	  value: "redux-model intetnal use"
-  	});
-  };
-
-  model.__proto__.on = Event.on;
-  model.__proto__.off = Event.off;
-  model.__proto__.send = (eventName) => {
-  	let state = {};
-
-  	for ( let prop in model ){
-  	  if ( !model.hasOwnProperty(prop) ) continue;
-      state[prop] = model[prop];
-    };
-
-  	let message = {
-  	  name,
-  	  state
-  	};
-  	
-  	Event.emit(eventName,message);
-  };
-
-  Object.defineProperty(model.__proto__,"on",{
-    writable: false
-  });
-  Object.defineProperty(model.__proto__,"off",{
-    writable: false
-  });
-  Object.defineProperty(model.__proto__,"send",{
-    writable: false
-  });
-
   return model;
 };
 

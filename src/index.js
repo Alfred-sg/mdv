@@ -1,12 +1,14 @@
 "use strict";
 
-import ModelDecorator from "ModelDecorator";
-import { createReducers, createReducer, isConnectdStore, connectModelToStore } from "./src/ModelManager";
+import createStore from "./createStore";
+import createModelDecorator from "./createModelDecorator";
+import connectComponent from "./connectComponent";
+
+let store = createStore();
+let ModelDecorator = createModelDecorator(store);
 
 export default {
+  store,
   ModelDecorator,
-  createReducers,
-  createReducer,
-  isConnectdStore,
-  connectModelToStore
+  connect: connectComponent
 }
