@@ -1,11 +1,11 @@
 "use strict";
 
-import ReactRedux from "react-redux";
+import * as ReactRedux from "react-redux";
 
-import ModelResigter from "./ModelResigter";
+import {models} from "./register";
 
 function connectComponent(name){
-  let model = ModelResigter[name];
+  let model = models[name];
 
   function mapStateToProps(state){
 	return {

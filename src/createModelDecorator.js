@@ -1,15 +1,14 @@
 "use strict";
 
-import ModelResigter from "./ModelResigter";
+import {register} from "./register";
 import subscribe from "./subscribe";
 
 const createModelDecorator = (store) => {
   return (name) => {
     return (ModelClass) => {
-      let model = ModelManager.registerModel(name,ModelClass);
+      let model = register(name,ModelClass);
       subscribe(name,store);
-
-      return;
+      return name;
     };
 
   };

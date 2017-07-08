@@ -4,11 +4,6 @@ import createStore from "./createStore";
 import createModelDecorator from "./createModelDecorator";
 import connectComponent from "./connectComponent";
 
-let store = createStore();
-let ModelDecorator = createModelDecorator(store);
-
-export default {
-  store,
-  ModelDecorator,
-  connect: connectComponent
-}
+export const store = createStore();
+export const ModelDecorator = createModelDecorator(store);
+export const connect = connectComponent

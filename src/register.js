@@ -1,10 +1,8 @@
 "use strict";
 
-import Event from "./Event";
+export let models = {};
 
-let models = {};
-
-function instantiateModel(ModelClass){
+function instantiate(ModelClass){
   let model = new ModelClass();
 
   if ( model.setState ){
@@ -14,7 +12,7 @@ function instantiateModel(ModelClass){
   return model;
 };
 
-function registerModel(name,ModelClass){
+export function register(name,ModelClass){
   if ( typeof name !== "string" ){
   	throw new TypeError("model should be a string.");
   };
@@ -27,7 +25,7 @@ function registerModel(name,ModelClass){
   	throw new Error("name is registerd.");
   };
 
-  let model = instantiateModel(ModelClass);
+  let model = instantiate(ModelClass);
 
   models[name] = model;
 
@@ -37,10 +35,3 @@ function registerModel(name,ModelClass){
 
   return model;
 };
-
-const ModelRegister = {
-  registerModel: registerModel,
-  models: models
-};
-
-export default ModelRegister

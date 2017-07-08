@@ -3,7 +3,8 @@
 import {combineReducers} from "redux";
 import {connect} from "react-redux";
 
-import ModelResigter from "./ModelResigter";
+import {models} from "./register";
+import {eventReducer} from "./eventReducer";
 
 function getInitialState(model){
   let initialState = {};
@@ -17,7 +18,7 @@ function getInitialState(model){
 };
 
 function createReducer(name){
-  let model = getModel(name);
+  let model = models[name];
   let initialState = getInitialState(model);
 
   let reducers = {
@@ -39,14 +40,14 @@ function createReducer(name){
   return reducer;
 };
 
-function mapStateToModel(models,state){
+function mapStateToModel(model,state){
   for (let prop in model){
     if ( !model.hasOwnProperty(prop) ) continue;
-    model[prop] = modelState[prop];
+    model[prop] = state[prop];
   };
 };
 
-let reducers = {};
+let reducers = { events: eventReducer };
 
 function replaceReducer(name,store){
   let modelReducer = createReducer(name);
@@ -57,7 +58,7 @@ function replaceReducer(name,store){
 }
 
 function subscribe(name,store){
-  let model = ModelResigter[name];
+  let model = models[name];
 
   model.getState = store.getState;// 获取全局state
 

@@ -1,6 +1,6 @@
 "use strict";
 
-import Redux from "redux";
+import * as Redux from "redux";
 
 import eventReducer from "./eventReducer";
 

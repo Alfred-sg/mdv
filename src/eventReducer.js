@@ -48,8 +48,8 @@ let eventReducers = {
   },
 };
 
-function eventReducer( state = {}, action ) => {
-  const handler = eventsReducers[action.type];
+export function eventReducer( state = {}, action ){
+  const handler = eventReducers[action.type];
   return handler ? handler(state,action) : state;
 };
 
