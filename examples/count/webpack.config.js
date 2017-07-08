@@ -14,7 +14,7 @@ var config = {
     extensions:[".js"]
   },
   output: {
-    path:path.resolve(__dirname,"./examples/count/public"),
+    path:path.resolve(__dirname,"./public"),
     filename:"index.js"
   },
   devServer: {
