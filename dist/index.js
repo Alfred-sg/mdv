@@ -4350,7 +4350,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var createModelDecorator = function createModelDecorator(store) {
   return function (name) {
+    console.log(name);
     return function (ModelClass) {
+      console.log(ModelClass);
       var model = (0, _register.register)(name, ModelClass);
       (0, _subscribe2.default)(name, store);
       return name;
@@ -4410,6 +4412,7 @@ function createReducer(name) {
     var action = arguments[1];
 
     var handler = reducers[action.type];
+    console.log(handler ? handler(state, action) : state);
     return handler ? handler(state, action) : state;
   };
 
@@ -4436,9 +4439,9 @@ function replaceReducer(name, store) {
 function subscribe(name, store) {
   var model = _register.models[name];
 
-  model.getState = store.getState; // 获取全局state
+  model.__proto__.getState = store.getState; // 获取全局state
 
-  model.setState = function (payload) {
+  model.__proto__.setState = function (payload) {
     store.dispatch({
       type: name + "/setState",
       payload: payload
@@ -7377,11 +7380,12 @@ var _register = __webpack_require__(11);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function connectComponent(name) {
+
   var model = _register.models[name];
 
   function mapStateToProps(state) {
     return {
-      state: state[name]
+      state: state[name] // 促使视图重绘
     };
   };
 

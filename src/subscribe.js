@@ -34,6 +34,7 @@ function createReducer(name){
 
   let reducer = ( state = initialState, action ) => {
     const handler = reducers[action.type];
+  	console.log(handler ? handler(state,action) : state);
     return handler ? handler(state,action) : state;
   };
 
@@ -60,9 +61,9 @@ function replaceReducer(name,store){
 function subscribe(name,store){
   let model = models[name];
 
-  model.getState = store.getState;// 获取全局state
+  model.__proto__.getState = store.getState;// 获取全局state
 
-  model.setState = (payload)=>{
+  model.__proto__.setState = (payload)=>{
     store.dispatch({
   	  type: `${name}/setState`,
       payload

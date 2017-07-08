@@ -1,14 +1,15 @@
 import React from "react";
 import {render} from "react-dom";
 import {Provider} from "react-redux";
-import {store,ModelDecorator,connect} from "../../../src/index"; import {
+import {store,ModelDecorator,connect} from "../../../src/index"; 
+import {
   BrowserRouter as Router,
   Route,
   Link
 } from 'react-router-dom'
 import {routerMiddleware} from "react-router-redux";
 
-//@ModelDecorator("conut")
+@ModelDecorator("count")
 class CountModel{
   constructor(props={a:1,...{b:2}}){
   	this.count = 0;
@@ -25,9 +26,8 @@ class CountModel{
   }
 };
 
-ModelDecorator("count")(CountModel);
-
 let Count = (props)=>{
+	console.log(props)
   const {model} = props;
   return (
   	<div>
