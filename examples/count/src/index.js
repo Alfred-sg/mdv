@@ -1,7 +1,5 @@
 import React from "react";
-import {render} from "react-dom";
-import {Provider} from "react-redux";
-import {store,ModelDecorator,connect} from "../../../src/index"; 
+import {store,ModelDecorator,connect,createApp} from "../../../src/index"; 
 import {
   BrowserRouter as Router,
   Route,
@@ -27,7 +25,7 @@ class CountModel{
 };
 
 let Count = (props)=>{
-	console.log(props)
+	//console.log(props)
   const {model} = props;
   return (
   	<div>
@@ -40,10 +38,14 @@ let Count = (props)=>{
 
 Count = connect("count")(Count);
 
-render(
-  <Provider store={store}>
-    <Router>
-      <Route path="/" component={Count}/>
-    </Router>
-  </Provider>
-,document.getElementById("root"));
+const app = createApp();
+
+app.model("count");
+
+app.router(
+  <Router>
+    <Route path="/" component={Count}/>
+  </Router>
+);
+
+app.start("#root");

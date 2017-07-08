@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Alfred-sg/redux-model#readme",
   "dependencies": {
+    "global": "^4.3.2",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
     "react-router-redux": "^4.0.8",

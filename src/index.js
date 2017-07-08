@@ -1,5 +1,6 @@
 "use strict";
 
+export createApp from "./createApp";
 import createStore from "./createStore";
 import createModelDecorator from "./createModelDecorator";
 import connectComponent from "./connectComponent";

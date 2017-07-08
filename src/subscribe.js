@@ -34,7 +34,6 @@ function createReducer(name){
 
   let reducer = ( state = initialState, action ) => {
     const handler = reducers[action.type];
-  	console.log(handler ? handler(state,action) : state);
     return handler ? handler(state,action) : state;
   };
 
