@@ -4,12 +4,13 @@ import React, { isValidElement } from "react";
 import { render } from "react-dom";
 import * as Redux from "redux";
 import { Provider } from "react-redux";
+import { routerMiddleware } from "react-router-redux";
 import invariant from 'invariant';
 
 import { querySelector, isHTMLElement } from "./utils";
 import eventReducer from "./model/reducers/eventReducer";
 import { injectReducer } from "./model/reducer";
-import publishModel from "./model/publishModel";
+import { registerModel, publishModel, getModelsName } from "./model";
 
 export default function createApp(){
 
@@ -29,31 +30,47 @@ export default function createApp(){
   let store = createStore();
 
   /**
-   * 数据模型model订阅stroe
-   * @param  {[type]} names [description]
-   * @return {[type]}       [description]
+   * 注册数据模型，并将其与stroe绑定
+   * @param  {function|Class|array|string|object|null} mod 导入已注册的数据模型或未注册的数据模型
+   * @return {object}                                  app
    */
-  function subscribeStore(names){
-	if ( Array.isArray(names) ){
-	  names.map(name => {
-  	    publishModel(name,store);
+  function model(mod){
+    let fnResult;
+    if ( typeof mod === "function" ){
+      try {
+        fnResult = mod();
+      } catch(e) {
+        registerModel(mod.name,mod);
+        publishModel(mod.name,store);
+      }finally{
+        if ( fnResult ) model(fnResult);
+      };
+      return app;
+    } else if ( Array.isArray(mod) ){
+      mod.map(m => {
+        model(m);
       });
-    } else if ( typeof names === "string" ){
-	  publishModel(names,store);
+      return app;
+    } else if ( typeof mod === "string" ){
+      publishModel(mod,store);
+      return app;
+    } else if ( typeof mod === "object" ){
+      let isModelClass = !Object.keys(mod).some(name => typeof mod[name] !== "function" );
+      if ( isModelClass ){
+        registerModel(mod.name,mod);
+        publishModel(mod.name,store);
+        return app;
+      }else{
+        Object.keys(mod).map(name=>{
+          registerModel(name,mod[name]);
+          publishModel(name,store);
+        });
+        return app;
+      };
+    } else if ( !mod ){
+      model(getModelsName());
+      return app;
     };
-  };
-
-  /**
-   * 数据模型model订阅stroe
-   * @param  {[type]} names [description]
-   * @return {[type]}       [description]
-   */
-  function model(names){
-    if ( typeof names === "function" ){
-	  names = names();
-    };
-
-    subscribeStore(names);
   };
 
   function router(Router){
@@ -61,7 +78,8 @@ export default function createApp(){
   	  this._router = () => Router;
   	} else {
   	  this._router = Router;
-  	}
+  	};
+    return app;
   };
 
   function getProvider(router) {

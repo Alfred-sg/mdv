@@ -4,6 +4,12 @@ import { getModel } from "./models";
 import { injectReducer } from "./reducer";
 import { setInternalMethods } from "./internalMethods";
 
+/**
+ * 获取model相关的reducer
+ * @param  {string} name  标识符
+ * @param  {object} model 数据模型
+ * @return {function}     reducer
+ */
 function createModelReducer(name,model){
   let initialState = {};
 
@@ -31,6 +37,13 @@ function createModelReducer(name,model){
   return reducer;
 };
 
+/**
+ * 替换redux中挂载的reducers
+ * @param  {string} name  标识符
+ * @param  {object} model 数据模型
+ * @param  {object} store redux-store
+ * @return
+ */
 function replaceReducer(name,model,store){
   let modelReducer = createModelReducer(name,model);
   let reducer = injectReducer({[name]: modelReducer});
@@ -38,6 +51,13 @@ function replaceReducer(name,model,store){
   store.replaceReducer(reducer);
 };
 
+/**
+ * 将model相关的state数据导入model的实例属性
+ * @param  {string} name  标识符
+ * @param  {object} model 数据模型
+ * @param  {object} store redux-store
+ * @return
+ */
 function mapStateToModel(name,model,store){
   store.subscribe(() => {
   	let state = store.getState();
@@ -50,14 +70,20 @@ function mapStateToModel(name,model,store){
   });
 };
 
+/**
+ * 发布model，为数据模型注入setState等方法；替换redux挂载的reducer；将相关state数据存入model实例属性
+ * @param  {string} name  标识符
+ * @param  {object} store redux-store
+ * @return
+ */
 function publishModel(name,store){
   let model = getModel(name);
 
-  setInternalMethods(name,model,store);
-
   replaceReducer(name,model,store);
 
-  mapStateToModel(name,model,store);
+  setInternalMethods(name,model,store);
+
+  //mapStateToModel(name,model,store);
 };
 
 export default publishModel;

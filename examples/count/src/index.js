@@ -1,51 +1,39 @@
-import React from "react";
-import {ModelDecorator,connect,createApp} from "../../../src/index"; 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
-import {routerMiddleware} from "react-router-redux";
+import React, {Component} from "react";
+import { ModelDecorator, ModelComponent, createApp } from "../../../src/index"; 
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-@ModelDecorator("count")
-class CountModel{
-  constructor(props={a:1,...{b:2}}){
-  	this.count = 0;
-  }
+@ModelDecorator()
+class count{
+  count = 0
   add(){
-  	this.setState({
-  	  count: this.count+1
-  	})
+  	this.count++;
   }
   minus(){
-  	this.setState({
-  	  count: this.count-1
-  	})
+  	this.count--;
   }
 };
 
-let Count = (props)=>{
-	//console.log(props)
-  const {model} = props;
-  return (
-  	<div>
-      <h2>{ model.count }</h2>
-      <button key="add" onClick={() => { model.add(); }}>+</button>
-      <button key="minus" onClick={() => { model.minus(); }}>-</button>
-    </div>
-  )
+@ModelComponent("count")
+class Count extends Component {
+  render(){
+    const {model} = this.props;
+    return (
+      <div>
+        <h2>{ model.count }</h2>
+        <button key="add" onClick={() => { model.add(); }}>+</button>
+        <button key="minus" onClick={() => { model.minus(); }}>-</button>
+      </div>
+    )
+  }
 };
-
-Count = connect("count")(Count);
 
 const app = createApp();
 
-app.model("count");
-
-app.router(
-  <Router>
-    <Route path="/" component={Count}/>
-  </Router>
-);
+app.model()
+  .router(
+    <Router>
+      <Route path="/" component={Count}/>
+    </Router>
+  );
 
 app.start("#root");
