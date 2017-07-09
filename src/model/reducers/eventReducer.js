@@ -1,5 +1,6 @@
 "use strict";
 
+// 以redux方式构建事件系统，在全局state的event属性中缓存事件名和绑定函数
 const eventReducers = {
   "on": (state,action) => {
   	let { event, callback } = action;

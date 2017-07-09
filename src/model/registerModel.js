@@ -21,9 +21,15 @@ function instantiateModelClass(ModelClass){
  * 将model以标识符name存入models缓存中
  * @param  {string}   name         标识符
  * @param  {Class}    ModelClass   model构造函数或普通对象
- * @return
+ * @return {string}   name
  */
-export function registerModel(name,ModelClass){
+function registerModel(name,ModelClass){
+  if ( arguments.length === 1 ){
+  	ModelClass = name;
+  	name = undefined;
+  };
+
+  name = name || ModelClass.name;
   invariant(typeof name === "string", "name should be a string.");
   invariant(typeof ModelClass === "function" , //|| typeof ModelClass === "object"
   	"ModelClass should be a Class.");
@@ -34,5 +40,7 @@ export function registerModel(name,ModelClass){
 
   addModel(name,model);
 
-  return;
+  return name;
 };
+
+export default registerModel;

@@ -17,6 +17,22 @@ export function getModel(name){
 };
 
 /**
+ * 获取已存入models缓存中的model
+ * @return {object}               model实例
+ */
+export function getModels(){
+  return models;
+};
+
+/**
+ * 获取已存入models缓存中的model.name
+ * @return {array}               model.name
+ */
+export function getModelsName(){
+  return Object.keys(models);
+};
+
+/**
  * 将model存入models缓存中
  * @param  {string}   name        标识符
  * @param  {object}               model实例
