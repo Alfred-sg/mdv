@@ -1,8 +1,6 @@
 "use strict";
 
-import {combineReducers} from "redux";
-
-let eventReducers = {
+const eventReducers = {
   "on": (state,action) => {
   	let { event, callback } = action;
   	let callbacks = state[event] || [];
@@ -48,13 +46,11 @@ let eventReducers = {
   },
 };
 
-export function eventReducer( state = {}, action ){
+function eventReducer( state = {}, action ){
   const handler = eventReducers[action.type];
   return handler ? handler(state,action) : state;
 };
 
-let reducer = combineReducers({
-  events: eventReducer
-});
-
-export default reducer
+export default {
+  event: eventReducer
+};

@@ -2,12 +2,14 @@
 
 import React, { isValidElement } from "react";
 import { render } from "react-dom";
+import * as Redux from "redux";
 import { Provider } from "react-redux";
 import invariant from 'invariant';
 
 import { querySelector, isHTMLElement } from "./utils";
-import createStore from "./createStore";
-import subscribe from "./subscribe";
+import eventReducer from "./model/reducers/eventReducer";
+import { injectReducer } from "./model/reducer";
+import publishModel from "./model/publishModel";
 
 export default function createApp(){
 
@@ -16,6 +18,12 @@ export default function createApp(){
   	model,
   	router,
   	start
+  };
+
+  function createStore(){
+    let initReducer = injectReducer(eventReducer);
+    let store = Redux.createStore(initReducer,{});
+    return store;
   };
 
   let store = createStore();
@@ -28,10 +36,10 @@ export default function createApp(){
   function subscribeStore(names){
 	if ( Array.isArray(names) ){
 	  names.map(name => {
-  	    subscribe(name,store);
+  	    publishModel(name,store);
       });
     } else if ( typeof names === "string" ){
-	  subscribe(names,store);
+	  publishModel(names,store);
     };
   };
 

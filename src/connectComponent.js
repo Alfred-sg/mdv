@@ -2,11 +2,11 @@
 
 import * as ReactRedux from "react-redux";
 
-import {models} from "./register";
+import { getModel } from "./model/models";
 
 function connectComponent(name){
 
-  let model = models[name];
+  let model = getModel(name);
 
   function mapStateToProps(state){
 	  return {

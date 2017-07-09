@@ -1,5 +1,5 @@
 import React from "react";
-import {store,ModelDecorator,connect,createApp} from "../../../src/index"; 
+import {ModelDecorator,connect,createApp} from "../../../src/index"; 
 import {
   BrowserRouter as Router,
   Route,
