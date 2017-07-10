@@ -83,6 +83,8 @@ function publishModel(name,store){
 
   setInternalMethods(name,model,store);
 
+  model.init && model.init();
+
   //mapStateToModel(name,model,store);
 };
 

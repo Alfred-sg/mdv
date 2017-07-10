@@ -3,47 +3,83 @@
 // 以redux方式构建事件系统，在全局state的event属性中缓存事件名和绑定函数
 const eventReducers = {
   "on": (state,action) => {
-  	let { event, callback } = action;
-  	let callbacks = state[event] || [];
+  	let { event, name="global", callback } = action;
+  	let modelEvents = state[event] || {};
+    let callbacks = modelEvents[name] || ( modelEvents[name] = [] )
   	callbacks.push(callback);
 
   	return {
   	  ...state,
-  	  [event]: callbacks
+  	  [event]: modelEvents
   	};
   },
   "emit": (state,action) => {
   	let { event, data } = action;
-  	let callbacks = state[event];
+  	let modelEvents = state[event];
 
-  	callbacks.map(cb => {
-  	  cb(data);
+  	modelEvents && Object.keys(modelEvents).map(name => {
+      modelEvents[name].map(cb => {
+        cb(data);
+      });
   	});
 
   	return state;
   },
   "off": (state,action) => {
-  	let { event, callback } = action;
+  	let { event, name, callback } = action;
 
-  	if ( !event && !callback ) return {};
+  	if ( !event && !name && !callback ) return {};
 
-  	if ( !callback ){
-  	  delete state[event];
+  	if ( !name && !callback ){
+  	  if( state[event] ) delete state[event];
   	  return state;
   	};
 
-  	let callbacks = state[event];
-  	callbacks = callbacks.filter(cb => cb!==callback);
+    if ( !event && !callback ){
+      Object.keys(state).map(event => {
+        if( state[event] && state[event][name] ) delete state[event][name];
+        if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
+      });
+      return state;
+    };
 
-  	if ( !callbacks.length ){
-  	  delete state[event];
-  	  return state;
-  	};
+    if ( event && name ){
+      if( state[event] && state[event][name] ) delete state[event][name];
+      if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
+      return state;
+    };
 
-  	return {
-  	  ...state,
-  	  [event]: callbacks
-  	};
+    if ( event && callback ){
+      Object.keys(state[event]).map(name => {
+        state[event][name] = state[event][name].filter(cb => cb!==callback);
+        if ( state[event][name].length ) delete state[event][name];
+      });
+      
+      if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
+      
+      return state;
+    };
+
+    if ( name && callback ){
+      Object.keys(state).map(event => {
+        state[event][name] = state[event][name].filter(cb => cb!==callback);
+        if ( state[event][name].length ) delete state[event][name];
+        if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
+      });
+      return state;
+    };
+
+
+    Object.keys(state).map(event => {
+      Object.keys(state[event]).map(name => {
+        state[event][name] = state[event][name].filter(cb => cb!==callback);
+        if ( state[event][name].length ) delete state[event][name];
+      });
+      
+      if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
+    });
+
+    return state;
   },
 };
 

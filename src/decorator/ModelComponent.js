@@ -1,5 +1,6 @@
 "use strict";
 
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { getModel } from "../model/models";
@@ -9,7 +10,7 @@ import { getModel } from "../model/models";
  * @param  {string} name model的标识符
  * @return {decorator}   由react-redux/connect创建的装饰函数
  */
-function ModelComponent(name){
+function ModelComponent(name,withLifecyle){
   let model = getModel(name);
 
   function mapStateToProps(state){
@@ -22,7 +23,44 @@ function ModelComponent(name){
     return { model };
   };
 
-  return connect(mapStateToProps,mapDispatchToProps);
+  let connectComponent = connect(mapStateToProps,mapDispatchToProps);
+
+  function ComponentDecorator(UserComponent){
+    class WrappedComponent extends Component{
+      componentWillMount(){
+        model.componentWillMount && model.componentWillMount();
+      }
+
+      componentDidMount(){
+        model.componentDidMount && model.componentDidMount();
+      }
+
+      componentWillReceiveProps(){
+        model.componentWillReceiveProps && model.componentWillReceiveProps(nextProps);
+      }
+
+      componentWillUpdate(nextProps){
+        model.componentWillUpdate && model.componentWillUpdate(nextProps);
+      }
+
+      componentDidUpdate(prevProps){
+        model.componentDidUpdate && model.componentDidUpdate(prevProps);
+      }
+
+      componentWillUnmount(){
+        model.componentWillUnmount && model.componentWillUnmount();
+      }
+
+      render(){
+        return <UserComponent {...this.props}/>
+      }
+    };
+
+    return connectComponent(WrappedComponent);
+  };
+
+  if ( withLifecyle ) return ComponentDecorator;
+  else return connectComponent
 };
 
 export default ModelComponent;

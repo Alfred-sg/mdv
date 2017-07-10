@@ -42,3 +42,13 @@ export function addModel(name,model){
   warning(!models[name], "name is registerd.")
   models[name] = model;
 };
+
+/**
+ * 将model从models缓存中移除
+ * @param  {string}   name        标识符
+ * @return
+ */
+export function removeModel(name,model){
+  warning(!models[name], "name is registerd.")
+  delete models[name];
+};

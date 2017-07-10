@@ -1,10 +1,6 @@
 "use strict";
 
-/**
- * 获取已存入models缓存中的model.name
- * @return {array}               model.name
- */
-export { getModelsName } from "./models";
+export { getModelsName, removeModel } from "./models";
 
 /**
  * 将model以标识符name存入models缓存中
