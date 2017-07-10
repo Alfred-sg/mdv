@@ -60,6 +60,7 @@ export function setInternalMethods(name,model,store){
   	store.dispatch({
   	  type: "on",
       event,
+      name,
       callback
     });
   };
@@ -68,6 +69,7 @@ export function setInternalMethods(name,model,store){
     store.dispatch({
   	  type: "off",
   	  event,
+      name,
       callback
     });
   };

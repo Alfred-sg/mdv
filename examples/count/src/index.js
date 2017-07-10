@@ -5,15 +5,18 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 @ModelDecorator()
 class count{
   count = 0
+  componentWillMount(){
+    this.on("test",a=>{console.log(a)});
+  }
   add(){
-  	this.count++;
+  	this.count++;this.emit("test","test event");
   }
   minus(){
-  	this.count--;
+  	this.count--;this.off("test");console.log(this.getGlobalState());
   }
 };
 
-@ModelComponent("count")
+@ModelComponent("count",true)
 class Count extends Component {
   render(){
     const {model} = this.props;
@@ -30,10 +33,9 @@ class Count extends Component {
 const app = createApp();
 
 app.model()
-  .router(
-    <Router>
-      <Route path="/" component={Count}/>
-    </Router>
-  );
-
-app.start("#root");
+.router(
+  <Router>
+    <Route path="/" component={Count}/>
+  </Router>
+)
+.start("#root");
