@@ -1,6 +1,7 @@
 import React, {Component} from "react";
+import { createLogger } from 'redux-logger';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import { ModelDecorator, ModelComponent, createApp } from "../../../src/index"; 
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 @ModelDecorator()
 class count{
@@ -30,7 +31,9 @@ class Count extends Component {
   }
 };
 
-const app = createApp();
+const app = createApp({
+  extraMiddlewares: [createLogger()]
+});
 
 app.model()
 .router(

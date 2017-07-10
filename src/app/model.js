@@ -2,8 +2,7 @@
 
 import { registerModel, publishModel, getModelsName } from "../model";
 
-
-export default function (app,store){
+export default function (store){
   
   /**
    * 注册数据模型，并将其与stroe绑定

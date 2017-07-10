@@ -18,3 +18,15 @@ export function injectReducer(reducersMap){
 
   return reducer;
 };
+
+/**
+ * 将标识符为name的reducer从reducers中移除
+ * @param  {string}    name     标识符
+ * @return {function}           redux初始化加载reducer，或store.replaceReducer替换的reducer
+ */
+export function removeReducer(name){
+  delete reducers[name];
+  let reducer = combineReducers(reducers);
+
+  return reducer;
+};

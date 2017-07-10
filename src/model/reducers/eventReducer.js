@@ -17,7 +17,7 @@ const eventReducers = {
   	let { event, data } = action;
   	let modelEvents = state[event];
 
-  	Object.keys(modelEvents).map(name => {
+  	modelEvents && Object.keys(modelEvents).map(name => {
       modelEvents[name].map(cb => {
         cb(data);
       });
@@ -31,21 +31,21 @@ const eventReducers = {
   	if ( !event && !name && !callback ) return {};
 
   	if ( !name && !callback ){
-  	  delete state[event];
+  	  if( state[event] ) delete state[event];
   	  return state;
   	};
 
     if ( !event && !callback ){
       Object.keys(state).map(event => {
-        delete state[event][name];
-        if ( !Object.keys(state[event]).length ) delete state[event];
+        if( state[event] && state[event][name] ) delete state[event][name];
+        if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
       });
       return state;
     };
 
     if ( event && name ){
-      delete state[event][name];
-      if ( !Object.keys(state[event]).length ) delete state[event];
+      if( state[event] && state[event][name] ) delete state[event][name];
+      if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
       return state;
     };
 
@@ -55,7 +55,7 @@ const eventReducers = {
         if ( state[event][name].length ) delete state[event][name];
       });
       
-      if ( !Object.keys(state[event]).length ) delete state[event];
+      if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
       
       return state;
     };
@@ -64,7 +64,7 @@ const eventReducers = {
       Object.keys(state).map(event => {
         state[event][name] = state[event][name].filter(cb => cb!==callback);
         if ( state[event][name].length ) delete state[event][name];
-        if ( !Object.keys(state[event]).length ) delete state[event];
+        if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
       });
       return state;
     };
@@ -76,7 +76,7 @@ const eventReducers = {
         if ( state[event][name].length ) delete state[event][name];
       });
       
-      if ( !Object.keys(state[event]).length ) delete state[event];
+      if ( state[event] && !Object.keys(state[event]).length ) delete state[event];
     });
 
     return state;
