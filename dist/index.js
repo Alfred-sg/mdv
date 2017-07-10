@@ -15477,18 +15477,35 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function createApp() {
   var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-    history: (0, _createHashHistory2.default)()
+    history: (0, _createHashHistory2.default)(),
+    initialState: {},
+    extraMiddlewares: [],
+    extraEnhancers: [],
+    extraReducers: {}
   };
 
+  opts.history = opts.history || (0, _createHashHistory2.default)();
+  opts.initialState = opts.initialState || {};
+  opts.extraMiddlewares = opts.extraMiddlewares || [];
+  opts.extraEnhancers = opts.extraEnhancers || [];
+  opts.extraReducers = opts.extraReducers || {};
 
   var store = (0, _app.createStore)(opts);
 
   var app = {
+    _store: (0, _app.createStore)(opts),
     _router: null,
     model: (0, _app.model)(store),
     unModel: (0, _app.unModel)(store),
     router: (0, _app.router)(opts.history),
     start: (0, _app.start)(store, opts.history)
+  };
+
+  if (opts.onStateChange) {
+    store.subscribe(function () {
+      var state = store.getState();
+      opts.onStateChange(state);
+    });
   };
 
   return app;
@@ -16281,19 +16298,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function createMdvStore() {
-  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+/**
+ * 创建redux-store
+ * @param  {object}   opts   配置项，{extraReducers,history,extraMiddlewares,extraEnhancers,
+ *                           		initialState}
+ * @return {object}          redux-store
+ */
+function createMdvStore(opts) {
 
+  var initReducer = (0, _reducer.injectReducer)(_extends({}, _eventReducer2.default, {
+    routing: _reactRouterRedux.routerReducer
+  }, opts.extraReducers));
 
-  var middlewares = [].concat(_toConsumableArray(opts.extraMiddlewares || []), [(0, _reactRouterRedux.routerMiddleware)(opts.history)]);
-  var initReducer = (0, _reducer.injectReducer)(_extends({}, _eventReducer2.default, { routing: _reactRouterRedux.routerReducer }));
+  var middlewares = [].concat(_toConsumableArray(opts.extraMiddlewares), [(0, _reactRouterRedux.routerMiddleware)(opts.history)]);
   var middleware = _redux.applyMiddleware.apply(undefined, _toConsumableArray(middlewares));
-  var enhancers = [middleware].concat(_toConsumableArray(opts.extraEnhancers || []));
+  var enhancers = [middleware].concat(_toConsumableArray(opts.extraEnhancers));
   var enhancer = _redux.compose.apply(undefined, _toConsumableArray(enhancers));
 
-  console.log(enhancers);
-
-  var store = (0, _redux.createStore)(initReducer, opts.initialState || {}, enhancer);
+  var store = (0, _redux.createStore)(initReducer, opts.initialState, enhancer);
 
   return store;
 };
@@ -16785,12 +16807,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (store) {
+
+  /**
+   * 移除model
+   * @param  {string}   modelName   model的标识符
+   * @return {object}               app
+   */
   function unModel(modelName) {
     (0, _model.removeModel)(modelName);
     var newReducer = (0, _reducer.removeReducer)(modelName);
     store.replaceReducer(newReducer);
     return this;
   };
+
+  return unModel;
 };
 
 var _model = __webpack_require__(36);
@@ -16812,6 +16842,11 @@ Object.defineProperty(exports, "__esModule", {
 
 exports.default = function (history) {
 
+  /**
+   * 配置路由
+   * @param  {function|ReactElement} RouterElement 路由react元素获取函数，或元素
+   * @return {object}                              app
+   */
   function router(RouterElement) {
     if ((0, _react.isValidElement)(RouterElement)) {
       this._router = function () {
@@ -16842,6 +16877,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (store, history) {
+
+  /**
+   * 渲染视图
+   * @param  {string|HTMLElement} container dom节点或节点选择器
+   * @return
+   */
   return function start(container) {
     // support selector
     if (typeof container === 'string') {

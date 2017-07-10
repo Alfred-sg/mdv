@@ -16,6 +16,12 @@ function renderProvider(router,store,history) {
 };
 
 export default function(store,history){
+
+  /**
+   * 渲染视图
+   * @param  {string|HTMLElement} container dom节点或节点选择器
+   * @return
+   */
   return function start(container){
     // support selector
     if (typeof container === 'string') {
@@ -31,4 +37,5 @@ export default function(store,history){
 
     render(provider,container);
   };
+
 };
