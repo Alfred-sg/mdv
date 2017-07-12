@@ -10,6 +10,7 @@ import { registerModel } from "../model/index";
 const ModelDecorator = (name) => {
   return (ModelClass) => {
     name = registerModel(name,ModelClass);
+    console.log(name)
     return name;
   };
 };

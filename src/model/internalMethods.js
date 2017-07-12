@@ -79,14 +79,23 @@ export function setInternalMethods(name,model,store){
   	if ( !model.hasOwnProperty(prop) ) return;
   	Object.defineProperty(model,prop,{
   	  get: function(){
+        console.log(model.constructor)
   	  	let modelState = model.getState();
-  	  	return modelState[prop];
+        let Constructor = model.constructor;
+        let stateModels = Constructor.stateModels;
+        let stateModel = stateModels && stateModels[prop];
+
+  	  	return stateModel ? new stateModel(modelState[prop]) : modelState[prop];
   	  },
   	  set: function(value){
+        let modelState = model.getState();
+        if ( value === modelState[prop] ) return;
+
   	  	store.dispatch({
   	      type: `${name}/setState`,
           payload: {
-          	[prop]: value
+          	[prop]: value,
+            key: prop
           }
         });
   	  }

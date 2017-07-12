@@ -20,7 +20,7 @@ function instantiateModelClass(ModelClass){
 /**
  * 将model以标识符name存入models缓存中
  * @param  {string}   name         标识符
- * @param  {Class}    ModelClass   model构造函数或普通对象
+ * @param  {Class}    ModelClass   model构造函数
  * @return {string}   name
  */
 function registerModel(name,ModelClass){
@@ -31,10 +31,9 @@ function registerModel(name,ModelClass){
 
   name = name || ModelClass.name;
   invariant(typeof name === "string", "name should be a string.");
-  invariant(typeof ModelClass === "function" , //|| typeof ModelClass === "object"
-  	"ModelClass should be a Class.");
+  invariant(typeof ModelClass === "function", "ModelClass should be a Class.");
 
-  let model = instantiateModelClass(ModelClass); //typeof ModelClass === "function" ? instantiateModelClass(ModelClass) : ModelClass;
+  let model = instantiateModelClass(ModelClass);
 
   validateInternalMethods(model);
 

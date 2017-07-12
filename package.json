@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Alfred-sg/redux-model#readme",
   "dependencies": {
+    "babel-runtime": "^6.23.0",
     "global": "^4.3.2",
     "react-redux": "^5.0.5",
     "react-router": "^4.1.1",
@@ -36,11 +37,14 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
-    "babel-runtime": "^6.23.0",
     "invariant": "^2.2.2",
+    "mocha": "^3.4.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-resource": "^1.0.9",
+    "react-router-dom": "^4.1.1",
     "redux-logger": "^3.0.6",
+    "roadhog": "^0.6.0",
     "warning": "^3.0.0",
     "webpack": "^3.1.0",
     "webpack-dev-server": "^2.5.1"

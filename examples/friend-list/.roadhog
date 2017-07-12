@@ -1,0 +1,15 @@
+{
+  "entry": "src/index.js",
+  "disableCSSModules": true,
+  "less": false,
+  "publicPath": "/",
+  "outputPath":"/public"
+  "extraBabelPlugins": ["transform-runtime","transform-decorators-legacy"],
+  "autoprefixer": null,
+  "proxy": null,
+  "env": {
+  	"development": {
+      "extraBabelPlugins": ["transform-runtime","transform-decorators-legacy"]
+  	}
+  }
+}
