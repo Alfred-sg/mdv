@@ -13,3 +13,5 @@ export ModelDecorator from "./ModelDecorator";
  * @return {decorator}   由react-redux/connect创建的装饰函数
  */
 export ModelComponent from "./ModelComponent";
+
+export * as StateModel from "./StateModel";

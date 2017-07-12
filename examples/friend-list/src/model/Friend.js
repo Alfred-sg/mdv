@@ -1,7 +1,9 @@
 "use strict";
 
-import { ModelDecorator } from "../../../../src/index"; 
+import { ModelDecorator, StateModel } from "../../../../src/index"; 
 import { FriendResource } from "../resource/friend"; 
+
+console.log(StateModel)
 
 const friends = [
   {
@@ -86,12 +88,27 @@ const friends = [
   }
 ];
 
+@StateModel.List
+class Friend{
+  id = null
+  name = null
+  username = null
+  books = []
+  addBooks(book){
+    this.books.push(book);
+  }
+}
+
 @ModelDecorator()
 class Friends{
+  static stateModels = {
+    friends: Friend
+  }
   query = ""
   friends = friends
   setQuery(q){
     this.query = q;
+    console.log(this.friends[0])
     this.friends = friends.filter(friend => {
       let keep = false;
       Object.keys(friend).forEach(key => {

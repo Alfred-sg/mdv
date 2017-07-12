@@ -1,4 +1,4 @@
 "use strict";
 
 export createApp from "./createApp";
-export { ModelDecorator ,ModelComponent } from "./decorator";
+export { ModelDecorator ,ModelComponent, StateModel } from "./decorator";

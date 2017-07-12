@@ -79,7 +79,6 @@ export function setInternalMethods(name,model,store){
   	if ( !model.hasOwnProperty(prop) ) return;
   	Object.defineProperty(model,prop,{
   	  get: function(){
-        console.log(model.constructor)
   	  	let modelState = model.getState();
         let Constructor = model.constructor;
         let stateModels = Constructor.stateModels;
@@ -100,5 +99,5 @@ export function setInternalMethods(name,model,store){
         });
   	  }
   	});
-  } 
+  };
 };

@@ -9,7 +9,7 @@ const app = createApp({
   extraMiddlewares: [createLogger()]
 });
 
-app.model("Friends")
+app.model()
 .router(
   <Router>
     <Route path="/" component={App}/>
