@@ -26,15 +26,19 @@ class SearchInput extends Component {
   }
 
   render() {
+    const { model } = this.props;
     return (
-      <input
-        value={this.props.value || ''}
-        placeholder={this.props.placeholder}
-        onChange={this.handleValueChange}
-        onKeyDown={this.handleEnterKeyDown}
-        id="search-input"
-        type="search"
-      />
+      <div>
+        <input
+          value={this.props.value || ''}
+          placeholder={this.props.placeholder}
+          onChange={this.handleValueChange}
+          onKeyDown={this.handleEnterKeyDown}
+          id="search-input"
+          type="search"
+        />
+        <button onClick={model.addFriend.bind(model)}>add</button>
+      </div>
     );
   }
 }

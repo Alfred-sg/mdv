@@ -73,18 +73,19 @@ export function setInternalMethods(name,model,store){
       callback
     });
   };
+  
+  let Constructor = model.constructor;
+  let propsModel = Constructor.propsModel;
 
   // model的实例属性变更时注入state，state变更时回填给实例属性
   for ( let prop in model ){
-  	if ( !model.hasOwnProperty(prop) ) return;
+  	if ( !model.hasOwnProperty(prop) ) continue;
   	Object.defineProperty(model,prop,{
   	  get: function(){
   	  	let modelState = model.getState();
-        let Constructor = model.constructor;
-        let stateModels = Constructor.stateModels;
-        let stateModel = stateModels && stateModels[prop];
+        let propModel = propsModel && propsModel[prop];
 
-  	  	return stateModel ? new stateModel(modelState[prop]) : modelState[prop];
+  	  	return propModel ? new propModel(modelState[prop],model) : modelState[prop];
   	  },
   	  set: function(value){
         let modelState = model.getState();

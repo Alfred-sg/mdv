@@ -5,9 +5,13 @@ const propTypes = {
   username: PropTypes.string
 };
 
-const FriendThumbnail = ({ name, username }) => (
+const FriendThumbnail = ({ name, username, friend }) => (
   <div className="friend-thumbnail">
-    <h4>{name} <span className="username">{username}</span></h4>
+    <h4 style={{display:"inline-block",marginRight:10}}>
+      {name} 
+      <span className="username">{username}</span>
+    </h4>
+    <button>edit</button>
   </div>
 );
 

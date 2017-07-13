@@ -1,3 +1,4 @@
 "use strict";
 
-export List from "./StateModels/List";
+export ArrayModel from "./StateModels/ArrayDecorator";
+export ObjectModel from "./StateModels/ObjectDecorator";

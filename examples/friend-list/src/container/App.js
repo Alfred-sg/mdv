@@ -14,7 +14,7 @@ class App extends Component {
 	    <div className={styles.app}>
         <SearchInput
           value={model.query}
-          placeholder="Search friends..."
+          placeholder="Search friends..." model={model}
           handleSearch={model.setQuery.bind(model)}
         />
         <FriendList friends={model.friends} />

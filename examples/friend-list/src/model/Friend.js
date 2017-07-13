@@ -1,9 +1,7 @@
 "use strict";
 
 import { ModelDecorator, StateModel } from "../../../../src/index"; 
-import { FriendResource } from "../resource/friend"; 
-
-console.log(StateModel)
+import { FriendResource } from "../resource/friend";
 
 const friends = [
   {
@@ -11,7 +9,7 @@ const friends = [
     name: 'Bruce Wayne',
     username: '@Batman',
     books: [{
-      title:"12"
+      title:"12", brief:"", publishDate:""
     }]
   },
   {
@@ -88,22 +86,27 @@ const friends = [
   }
 ];
 
-@StateModel.List
+@StateModel.ObjectModel
 class Friend{
-  id = null
-  name = null
-  username = null
-  books = []
   addBooks(book){
-    this.books.push(book);
+  }
+}
+
+
+@StateModel.ArrayModel
+class FriendsList{
+  static ItemModel = Friend
+  friends = []
+  addFriend(friend){
+    this.friends.push(friend);
   }
 }
 
 @ModelDecorator()
 class Friends{
-  static stateModels = {
-    friends: Friend
-  }
+  // static propsModel = {
+  //   friends: FriendsList
+  // }
   query = ""
   friends = friends
   setQuery(q){
@@ -119,6 +122,19 @@ class Friends{
       });
       return keep;
     });
+  }
+  addFriend(){
+    console.log(32423)
+    let friends = [...this.friends]
+    friends[1] = {
+      id: 10,
+      name: 'Jonathan Osterman',
+      username: '@Dr.Manhattan',
+      books: [{
+        title:"12"
+      }]
+    };
+    this.friends = friends;
   }
   queryFriend(){
     FriendResource.query({
