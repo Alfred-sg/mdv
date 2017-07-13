@@ -7189,23 +7189,40 @@ function setInternalMethods(name, model, store) {
 
   var _loop = function _loop(prop) {
     if (!model.hasOwnProperty(prop)) return "continue";
+
+    var property = Object.getOwnPropertyDescriptor(model, prop);
+    if (property && property.configurable === false) {
+      return "continue";
+    };
+
+    console.log(property);
+
+    var getter = property && property.get;
+    var setter = property && property.set;
+
     Object.defineProperty(model, prop, {
       get: function get() {
         var modelState = model.getState();
         var propModel = propsModel && propsModel[prop];
+        var value = getter ? getter.call(model) : modelState[prop];
 
-        return propModel ? new propModel(modelState[prop], model) : modelState[prop];
+        return propModel ? new propModel(value) : value;
+        // propModel ? new propModel(modelState[prop],model) : modelState[prop];
       },
       set: function set(value) {
-        var _payload;
-
         var modelState = model.getState();
-        if (value === modelState[prop]) return;
+        if (value !== modelState[prop]) {
+          var _payload;
 
-        store.dispatch({
-          type: name + "/setState",
-          payload: (_payload = {}, _defineProperty(_payload, prop, value), _defineProperty(_payload, "key", prop), _payload)
-        });
+          store.dispatch({
+            type: name + "/setState",
+            payload: (_payload = {}, _defineProperty(_payload, prop, value), _defineProperty(_payload, "key", prop), _payload)
+          });
+        };
+
+        if (setter) {
+          setter.call(model, value);
+        };
       }
     });
   };

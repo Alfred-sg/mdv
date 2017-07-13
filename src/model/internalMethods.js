@@ -80,24 +80,41 @@ export function setInternalMethods(name,model,store){
   // model的实例属性变更时注入state，state变更时回填给实例属性
   for ( let prop in model ){
   	if ( !model.hasOwnProperty(prop) ) continue;
+
+    const property = Object.getOwnPropertyDescriptor(model, prop)
+    if (property && property.configurable === false) {
+      continue
+    };
+
+    console.log(property)
+
+    let getter = property && property.get;
+    let setter = property && property.set;
+
   	Object.defineProperty(model,prop,{
   	  get: function(){
   	  	let modelState = model.getState();
         let propModel = propsModel && propsModel[prop];
+        let value = getter ? getter.call(model) : modelState[prop];
 
-  	  	return propModel ? new propModel(modelState[prop],model) : modelState[prop];
+  	  	return propModel ? new propModel(value) : value;
+        // propModel ? new propModel(modelState[prop],model) : modelState[prop];
   	  },
   	  set: function(value){
         let modelState = model.getState();
-        if ( value === modelState[prop] ) return;
+        if ( value !== modelState[prop] ){
+          store.dispatch({
+            type: `${name}/setState`,
+            payload: {
+              [prop]: value,
+              key: prop
+            }
+          });
+        };
 
-  	  	store.dispatch({
-  	      type: `${name}/setState`,
-          payload: {
-          	[prop]: value,
-            key: prop
-          }
-        });
+        if (setter) {
+          setter.call(model, value)
+        };
   	  }
   	});
   };
