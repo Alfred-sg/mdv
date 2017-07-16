@@ -1,6 +1,7 @@
 "use strict";
 
-import warning from 'warning';
+import warning from "warning";
+import Observer from "../observer";
 
 /**
  * 校验数据模型model的setState、getGlobalState、getModelState、emit、on、off
@@ -77,45 +78,69 @@ export function setInternalMethods(name,model,store){
   let Constructor = model.constructor;
   let propsModel = Constructor.propsModel;
 
+  new Observer(model,[],(value,keys)=>{
+    let keypath = "";
+    let mainKey = keys[0];
+    let state = {...model};
+    let newState;
+    keys.map(key=>{
+      keypath += "[" + key + "]";
+
+      if ( !newState ) newState = state[key];
+      else newState = newState[key];
+    });
+
+    newState = value;
+
+    store.dispatch({
+      type: `${name}/setState`,
+      payload: {
+        [mainKey]: state[mainKey]
+      },
+      keypath: keypath
+    });
+  })
+
   // model的实例属性变更时注入state，state变更时回填给实例属性
-  for ( let prop in model ){
-  	if ( !model.hasOwnProperty(prop) ) continue;
+  // for ( let prop in model ){
+  // 	if ( !model.hasOwnProperty(prop) ) continue;
 
-    const property = Object.getOwnPropertyDescriptor(model, prop)
-    if (property && property.configurable === false) {
-      continue
-    };
+  //   const property = Object.getOwnPropertyDescriptor(model, prop)
+  //   if (property && property.configurable === false) {
+  //     continue
+  //   };
 
-    console.log(property)
+  //   console.log(property)
 
-    let getter = property && property.get;
-    let setter = property && property.set;
+  //   let getter = property && property.get;
+  //   let setter = property && property.set;
 
-  	Object.defineProperty(model,prop,{
-  	  get: function(){
-  	  	let modelState = model.getState();
-        let propModel = propsModel && propsModel[prop];
-        let value = getter ? getter.call(model) : modelState[prop];
+  // 	Object.defineProperty(model,prop,{
+  //     enumerable: true,
+  // 	  get: function(){
+  // 	  	let modelState = model.getState();
+  //       let propModel = propsModel && propsModel[prop];
+  //       let value = getter ? getter.call(model) : modelState[prop];
 
-  	  	return propModel ? new propModel(value) : value;
-        // propModel ? new propModel(modelState[prop],model) : modelState[prop];
-  	  },
-  	  set: function(value){
-        let modelState = model.getState();
-        if ( value !== modelState[prop] ){
-          store.dispatch({
-            type: `${name}/setState`,
-            payload: {
-              [prop]: value,
-              key: prop
-            }
-          });
-        };
+  // 	  	return propModel ? new propModel(value) : value;
+  //       // propModel ? new propModel(modelState[prop],model) : modelState[prop];
+  // 	  },
+  // 	  set: function(value){
+  //       let modelState = model.getState();
+  //       if ( value !== modelState[prop] ){
+  //         store.dispatch({
+  //           type: `${name}/setState`,
+  //           payload: {
+  //             [prop]: value,
+  //             key: prop
+  //           }
+  //         });
+  //       };
 
-        if (setter) {
-          setter.call(model, value)
-        };
-  	  }
-  	});
-  };
+  //       if (setter) {
+  //         setter.call(model, value)
+  //       };
+  // 	  }
+  // 	});
+  // };
 };

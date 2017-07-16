@@ -6,12 +6,16 @@ import { ModelDecorator, ModelComponent, createApp } from "../../../src/index";
 @ModelDecorator()
 class count{
   count = 0
-  list = [{a:1},2,3]
+  //list = [{a:1},2,3]
   componentWillMount(){
     this.on("test",a=>{console.log(a)});
   }
   add(){
-  	this.count++;this.list[0].a=3;this.emit("test","test event");
+  	this.count++;
+    //this.list[0].a=3;
+    //this.list.splice(1,1)
+    //this.emit("test","test event");
+    console.log(this.count)
   }
   minus(){
   	this.count--;this.off("test");console.log(this.getGlobalState());

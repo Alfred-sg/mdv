@@ -15,3 +15,18 @@ export function querySelector(container){
 export function isPlainObject (obj) {
   return _toString.call(obj) === '[object Object]'
 }
+
+export const hasProto = '__proto__' in {};
+
+export function def(obj,key,val,enumerable){
+  Object.defineProperty(obj,key,{
+    value: val,
+    enumerable: !!enumerable,
+    writable: true,
+    configurable: true
+  });
+};
+
+export function isObject(obj){
+  return obj !== null && typeof obj === 'object';
+};
