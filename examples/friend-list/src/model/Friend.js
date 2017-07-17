@@ -124,17 +124,14 @@ class Friends{
     });
   }
   addFriend(){
-    console.log(32423)
-    let friends = [...this.friends]
-    friends[1] = {
-      id: 10,
-      name: 'Jonathan Osterman',
+    this.friends.push({
+      id: 101,
+      name: 'Jonathan Osterman111',
       username: '@Dr.Manhattan',
       books: [{
         title:"12"
       }]
-    };
-    this.friends = friends;
+    });
   }
   queryFriend(){
     FriendResource.query({

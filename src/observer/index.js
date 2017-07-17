@@ -8,7 +8,11 @@ const arrayMethods = Object.create(arrayProto);
 ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'].forEach(function(method){
   const original = arrayProto[method];
   def(arrayMethods, method, function mutator(){
-    const args = arguments.slice();
+    let i = arguments.length;
+    const args = new Array(i);
+    while( i-- ){
+      args[i] = arguments[i];
+    };
     const result = original.apply(this,args);
     const ob = this.__ob__;
     let inserted;
@@ -23,9 +27,9 @@ const arrayMethods = Object.create(arrayProto);
         inserted = args.slice(2);
         break;
     };
-    if ( inserted ) ob.observeArray(inserted);
+    if ( inserted ) new Observer(inserted);
 
-    ob.notify();
+    ob.notify(ob,ob.keypath);
     return result;
   });
 });
@@ -36,6 +40,7 @@ export default class Observer{
   	this.keypath = keypath;
   	if ( !keypath.length ) this.rootData = true;
   	def(vm,"__ob__",this);
+    def(vm,"keypath",keypath);
     if (Array.isArray(vm)) {
       this._defineArrayReactive(vm);
     } else {

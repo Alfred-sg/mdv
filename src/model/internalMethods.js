@@ -78,6 +78,7 @@ export function setInternalMethods(name,model,store){
   let Constructor = model.constructor;
   let propsModel = Constructor.propsModel;
 
+  // view-model双向绑定
   new Observer(model,[],(value,keys)=>{
     let keypath = "";
     let mainKey = keys[0];
