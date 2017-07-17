@@ -96,17 +96,16 @@ class Friend{
 @StateModel.ArrayModel
 class FriendsList{
   static ItemModel = Friend
-  friends = []
   addFriend(friend){
-    this.friends.push(friend);
+    this.push(friend);
   }
 }
 
 @ModelDecorator()
 class Friends{
-  // static propsModel = {
-  //   friends: FriendsList
-  // }
+  static propsModel = {
+    friends: FriendsList
+  }
   query = ""
   friends = friends
   setQuery(q){
@@ -124,7 +123,8 @@ class Friends{
     });
   }
   addFriend(){
-    this.friends.push({
+    console.log(this)
+    this.friends.addFriend({
       id: 101,
       name: 'Jonathan Osterman111',
       username: '@Dr.Manhattan',

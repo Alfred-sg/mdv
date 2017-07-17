@@ -4,7 +4,7 @@ import invariant from "invariant";
 import { isPlainObject } from "../../utils"
 
 export default function ObjectDecorator(ModelClass){
-  invariant(typeof ModelClass === "function", "list should be a array.");
+  invariant(typeof ModelClass === "function", "ModelClass should be a class.");
 
   return (obj,hostModel) => {
   	invariant(isPlainObject(obj), "obj should be a object.");

@@ -3,7 +3,7 @@
 import invariant from "invariant"; 
 
 export default function ArrayDecorator(ModelClass){
-  invariant(typeof ModelClass === "function", "list should be a array.");
+  invariant(typeof ModelClass === "function", "ModelClass should be a class.");
 
   return (list,hostModel) => {
   	invariant(Array.isArray(list), "list should be a array.");
