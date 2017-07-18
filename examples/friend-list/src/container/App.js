@@ -2,7 +2,7 @@
 
 import styles from './App.less';
 import React, {Component} from "react";
-import { ModelComponent } from "../../../../src/index"; 
+import { ModelComponent } from "../../../../lib/index"; 
 import SearchInput from '../components/SearchInput';
 import FriendList from '../components/FriendList';
 

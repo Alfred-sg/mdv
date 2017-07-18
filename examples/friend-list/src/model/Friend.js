@@ -1,6 +1,6 @@
 "use strict";
 
-import { ModelDecorator, StateModel } from "../../../../src/index"; 
+import { ModelDecorator, StateModel } from "../../../../lib/index"; 
 import { FriendResource } from "../resource/friend";
 
 const friends = [
