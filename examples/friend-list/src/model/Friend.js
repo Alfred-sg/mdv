@@ -107,20 +107,23 @@ class Friends{
     friends: FriendsList
   }
   query = ""
-  friends = friends
+  friends = []
   setQuery(q){
     this.query = q;
-    console.log(this.friends[0])
-    this.friends = friends.filter(friend => {
-      let keep = false;
-      Object.keys(friend).forEach(key => {
-        const val = friend[key].toString();
-        if (val.toLowerCase().includes(q.toLowerCase())) {
-          keep = true;
-        }
-      });
-      return keep;
-    });
+    // console.log(this.friends[0])
+    // this.friends = friends.filter(friend => {
+    //   let keep = false;
+    //   Object.keys(friend).forEach(key => {
+    //     const val = friend[key].toString();
+    //     if (val.toLowerCase().includes(q.toLowerCase())) {
+    //       keep = true;
+    //     }
+    //   });
+    //   return keep;
+    // });
+    FriendResource.get({}).then((res)=>{
+      this.friends = res;
+    })
   }
   addFriend(){
     console.log(this)
