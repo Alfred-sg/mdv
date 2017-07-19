@@ -3,7 +3,6 @@
 import warning from "warning";
 import Observer from "../observer";
 import { isObject } from "../utils";
-import { ArrayModel, ObjectModel } from "../decorator/StateModel";
 
 /**
  * 校验数据模型model的setState、getGlobalState、getModelState、emit、on、off
@@ -104,13 +103,6 @@ export function setInternalMethods(name,model,store){
     });
   });
 
-  for ( let prop in model ){
-    if ( !model.hasOwnProperty(prop) ) continue;
-
-    let propModel = propsModel && propsModel[prop];
-    if ( propModel ) model[prop] = propModel(model[prop],model);
-  };
-
   // model的实例属性变更时注入state，state变更时回填给实例属性
   // for ( let prop in model ){
   // 	if ( !model.hasOwnProperty(prop) ) continue;
@@ -132,8 +124,7 @@ export function setInternalMethods(name,model,store){
   //       let propModel = propsModel && propsModel[prop];
   //       let value = getter ? getter.call(model) : modelState[prop];
 
-  // 	  	return propModel ? new propModel(value) : value;
-  //       // propModel ? new propModel(modelState[prop],model) : modelState[prop];
+  // 	  	return value;
   // 	  },
   // 	  set: function(value){
   //       let modelState = model.getState();
